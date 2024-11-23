@@ -1,0 +1,36 @@
+version: '3.8'
+services:
+  php:
+    php-apache-environment:
+    container_name: php-apache
+    build: 
+      context: ./php
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    volumes:
+      - ./php/src:/var/www/html/
+    ports:
+      - 8085:80
+
+  db:
+    container_name: db_pgsql
+    image: postgres
+    restart: always
+    environment:
+      POSTGRES_USER: oat
+      POSTGRES_PASSWORD: 1234
+    ports:
+      - "5432:80"
+
+  pgadmin:
+    container_name: pgadmin4_container
+    image: dpage/pgadmin4
+    ports:
+      - "5050:80"
+    restart: always
+    environment:
+      PGADMIN_DEFAULT_EMAIL: oat@admin.com
+      PGADMIN_DEFAULT_PASSWORD: 1234
+    depends_on:
+      - db
